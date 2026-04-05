@@ -1,0 +1,52 @@
+name: "Energy Frontier Briefing"
+
+on:
+  schedule:
+    # Every Monday at 08:00 UTC — job checks if it's the 2nd or last Monday
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+jobs:
+  run-briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if 2nd or last Monday
+        id: date-check
+        run: |
+          DAY=$(date +%d)
+          # 2nd Monday: day 8-14
+          IS_SECOND=$([ "$DAY" -ge 8 ] && [ "$DAY" -le 14 ] && echo true || echo false)
+
+          # Last Monday: check if adding 7 days crosses into next month
+          NEXT_WEEK=$(date -d "+7 days" +%m)
+          THIS_MONTH=$(date +%m)
+          IS_LAST=$([ "$NEXT_WEEK" != "$THIS_MONTH" ] && echo true || echo false)
+
+          if [ "$IS_SECOND" = "true" ] || [ "$IS_LAST" = "true" ]; then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping — not the 2nd or last Monday (day=$DAY)"
+          fi
+
+      - name: Checkout
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        run: pip install -r requirements.txt
+
+      - name: Run briefing
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: python -m frontierwatch run energy

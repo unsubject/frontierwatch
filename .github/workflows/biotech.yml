@@ -1,0 +1,44 @@
+name: "Biotech Frontier Intelligence Report"
+
+on:
+  schedule:
+    # Every Monday at 08:00 UTC — job checks if it's the 1st or 3rd Monday
+    - cron: "0 8 * * 1"
+  workflow_dispatch:
+
+jobs:
+  run-briefing:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check if 1st or 3rd Monday
+        id: date-check
+        run: |
+          DAY=$(date +%d)
+          if [ "$DAY" -le 7 ] || ([ "$DAY" -ge 15 ] && [ "$DAY" -le 21 ]); then
+            echo "should_run=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "should_run=false" >> "$GITHUB_OUTPUT"
+            echo "Skipping — not the 1st or 3rd Monday (day=$DAY)"
+          fi
+
+      - name: Checkout
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+
+      - name: Install dependencies
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        run: pip install -r requirements.txt
+
+      - name: Run briefing
+        if: steps.date-check.outputs.should_run == 'true' || github.event_name == 'workflow_dispatch'
+        env:
+          PERPLEXITY_API_KEY: ${{ secrets.PERPLEXITY_API_KEY }}
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+          NOTION_API_KEY: ${{ secrets.NOTION_API_KEY }}
+        run: python -m frontierwatch run biotech
