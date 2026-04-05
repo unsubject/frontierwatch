@@ -1,0 +1,21 @@
+[build-system]
+requires = ["setuptools>=68.0", "wheel"]
+build-backend = "setuptools.backends._legacy:_Backend"
+
+[project]
+name = "frontierwatch"
+version = "0.1.0"
+description = "Automated area briefing pipeline for frontier research monitoring"
+requires-python = ">=3.11"
+dependencies = [
+    "httpx>=0.27",
+    "anthropic>=0.40",
+    "click>=8.1",
+    "python-dotenv>=1.0",
+]
+
+[project.scripts]
+frontierwatch = "frontierwatch.cli:main"
+
+[tool.setuptools.packages.find]
+include = ["frontierwatch*"]
