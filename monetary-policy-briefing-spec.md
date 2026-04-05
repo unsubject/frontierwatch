@@ -48,7 +48,7 @@ Ordered by approximate nominal GDP of jurisdiction.
 
 ### 2.4 Time Horizon
 
-Rolling **7-day window** ending on the briefing date (typically Sunday).
+Rolling **7-day window** ending on the briefing date, every week on Sunday at 1000 US Eastern Time.
 
 ## 3. Source Hierarchy
 
