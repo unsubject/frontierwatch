@@ -47,7 +47,7 @@ Ordered by approximate nominal GDP of jurisdiction.
 
 ### 2.5 Time Horizon
 
-Rolling **14-day window** ending on the briefing date.
+Rolling **14-day window** ending on the briefing date. Every first and third Friday of the month.
 
 ## 3. Source Hierarchy
 
