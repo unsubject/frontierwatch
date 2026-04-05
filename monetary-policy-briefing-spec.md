@@ -10,7 +10,7 @@
 
 ## 1. Purpose & Use Case
 
-A weekly reference briefing on global central bank monetary policy, designed for **personal research and episode prep** (利世民頻道 / Unsubject). The briefing is a factual input layer — no editorial angle baked in. Simon applies his own analytical lens downstream.
+A weekly reference briefing on global central bank monetary policy, designed for **personal research**. The briefing is a factual input layer — no editorial angle baked in.
 
 ## 2. Scope
 
@@ -183,16 +183,12 @@ English only. No bilingual annotations.
 
 ## 9. Repeatable Template & Future Automation
 
-This spec is designed as a **repeatable weekly template**. Current workflow:
-
-1. Simon triggers the briefing (e.g., "monetary policy briefing" or "central bank update")
-2. Claude performs web searches against official sources for the trailing 7 days
-3. Claude populates the template and delivers as markdown
+This spec is designed as a **repeatable weekly template**.
 
 **Future automation path:**
 - Web search across all 13 central bank sites can be scripted
 - RSS feeds / press release pages can be monitored
-- Output can be pushed to a Notion database (one entry per week)
+- Output be pushed to a Notion database (one entry per week)
 - Cross-bank table can be maintained as a running time series
 
 ---
