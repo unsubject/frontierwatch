@@ -151,7 +151,3 @@ Running list of companies/technologies carried forward from previous issues, wit
 6. Write the full report page and create it in the Briefing DB
 7. Add new entries or update existing entries in the Watchlist DB
 8. Update the `Last Updated` date on any watchlist item that was referenced
-
-## Trigger Phrase
-
-Say **"Energy Watch"** or **"Energy briefing"** followed by the issue number to produce the next report.
