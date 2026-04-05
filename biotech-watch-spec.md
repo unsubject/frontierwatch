@@ -150,7 +150,3 @@ Early-stage developments to monitor in the next cycle. Each item is also added t
 6. Write the full report page and create it in the Reports DB
 7. Add new entries or update existing entries in the Watchlist DB
 8. Update the `Last Updated` date on any watchlist item that was referenced
-
-## Trigger Phrase
-
-Say **"Biotech Watch"** or **"Biotech briefing"** followed by the issue number to produce the next report.
