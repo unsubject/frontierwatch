@@ -11,9 +11,9 @@ class BiotechBriefing(BaseBriefing):
     spec_file = "biotech-watch-spec.md"
 
     # Notion: database-backed
-    notion_parent_id = "2583c017-68fe-41a3-8c56-65f4afafb875"
+    notion_parent_id = "9809a709-caa4-4ca5-992d-3e423d17ba8a"
     notion_parent_type = "database"
-    notion_watchlist_db_id = "0b8d7a5c-679b-4d3e-b950-7ad2b6f3b6f3"
+    notion_watchlist_db_id = "2e77dbdd-066a-4fa0-b745-b8eca53ffe05"
 
     recency = "month"
 
