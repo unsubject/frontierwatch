@@ -8,6 +8,7 @@ from datetime import date, timedelta
 from pathlib import Path
 
 from frontierwatch.output.notion import NotionClient
+from frontierwatch.output.rss import FeedManager
 from frontierwatch.processing.synthesizer import Synthesizer
 from frontierwatch.sources.perplexity import PerplexityClient
 
@@ -36,6 +37,7 @@ class BaseBriefing(ABC):
         self._perplexity = None
         self._synthesizer = None
         self._notion = None
+        self._feed = None
 
     @property
     def perplexity(self) -> PerplexityClient:
@@ -54,6 +56,12 @@ class BaseBriefing(ABC):
         if self._notion is None:
             self._notion = NotionClient()
         return self._notion
+
+    @property
+    def feed(self) -> FeedManager:
+        if self._feed is None:
+            self._feed = FeedManager()
+        return self._feed
 
     # ------------------------------------------------------------------
     # Abstract interface
@@ -123,7 +131,7 @@ class BaseBriefing(ABC):
         return url
 
     def run(self, end_date: date | None = None) -> str:
-        """Execute the full pipeline: gather → synthesize → publish."""
+        """Execute the full pipeline: gather → synthesize → publish → RSS."""
         date_display, start, end = self.compute_date_range(end_date)
         logger.info("[%s] Starting briefing for %s", self.slug, date_display)
 
@@ -140,5 +148,17 @@ class BaseBriefing(ABC):
         )
 
         url = self.publish(result)
-        logger.info("[%s] Published: %s", self.slug, url)
+        logger.info("[%s] Published to Notion: %s", self.slug, url)
+
+        # Add to RSS feed
+        self.feed.add_entry(
+            title=result["title"],
+            slug=self.slug,
+            content_md=result["content"],
+            notion_url=url,
+            pub_date=end,
+        )
+        self.feed.generate_feed()
+        logger.info("[%s] RSS feed updated", self.slug)
+
         return url
