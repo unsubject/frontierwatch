@@ -93,6 +93,8 @@ class Synthesizer:
         )
 
         raw = message.content[0].text.strip()
+        logger.info("Synthesis response received (%d chars)", len(raw))
+
         # Strip markdown fences if present
         if raw.startswith("```"):
             raw = raw.split("\n", 1)[1]
@@ -100,7 +102,15 @@ class Synthesizer:
                 raw = raw[: raw.rfind("```")]
             raw = raw.strip()
 
-        return json.loads(raw)
+        try:
+            result = json.loads(raw)
+        except json.JSONDecodeError as exc:
+            logger.error("Failed to parse synthesis JSON: %s", exc)
+            logger.error("Raw response (first 500 chars): %s", raw[:500])
+            raise ValueError(f"Claude returned invalid JSON: {exc}") from exc
+
+        logger.info("Parsed synthesis JSON — keys: %s", list(result.keys()))
+        return result
 
     @staticmethod
     def _format_research(research_data: list[dict]) -> str:
