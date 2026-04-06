@@ -11,9 +11,9 @@ class EnergyBriefing(BaseBriefing):
     spec_file = "energy-watch-spec-v2.md"
 
     # Notion: database-backed
-    notion_parent_id = "31814856-b31d-4f45-805d-cb708f59d374"
+    notion_parent_id = "d5b27811-e041-4daf-be72-3f381509e01e"
     notion_parent_type = "database"
-    notion_watchlist_db_id = "42b44214-3942-478b-bc45-9a47e065d046"
+    notion_watchlist_db_id = "a0e10c72-c509-4b77-aeeb-c0a54e00c805"
 
     recency = "month"
 
