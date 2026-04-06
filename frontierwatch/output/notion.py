@@ -45,7 +45,9 @@ class NotionClient:
 
         *parent_type* is ``"page"`` or ``"database"``.
         """
+        logger.info("Converting markdown to Notion blocks (%d chars)", len(markdown))
         blocks = markdown_to_blocks(markdown)
+        logger.info("Converted to %d Notion blocks", len(blocks))
 
         if parent_type == "database":
             parent = {"database_id": parent_id}
@@ -58,8 +60,12 @@ class NotionClient:
         first_batch = blocks[:BLOCKS_PER_REQUEST]
         body = {"parent": parent, "properties": props, "children": first_batch}
 
-        with httpx.Client(timeout=60, headers=self.headers) as client:
+        timeout = httpx.Timeout(connect=15, read=60, write=30, pool=15)
+        with httpx.Client(timeout=timeout, headers=self.headers) as client:
+            logger.info("Creating Notion page (batch 1, %d blocks)...", len(first_batch))
             resp = client.post(f"{NOTION_API}/pages", json=body)
+            if not resp.is_success:
+                logger.error("Notion API error %d: %s", resp.status_code, resp.text[:500])
             resp.raise_for_status()
             page = resp.json()
             page_id = page["id"]
@@ -67,14 +73,19 @@ class NotionClient:
 
             # Append remaining blocks in batches
             remaining = blocks[BLOCKS_PER_REQUEST:]
+            batch_num = 2
             while remaining:
                 batch = remaining[:BLOCKS_PER_REQUEST]
                 remaining = remaining[BLOCKS_PER_REQUEST:]
+                logger.info("Appending blocks (batch %d, %d blocks)...", batch_num, len(batch))
                 resp = client.patch(
                     f"{NOTION_API}/blocks/{page_id}/children",
                     json={"children": batch},
                 )
+                if not resp.is_success:
+                    logger.error("Notion API error %d: %s", resp.status_code, resp.text[:500])
                 resp.raise_for_status()
+                batch_num += 1
 
         logger.info("Created Notion page: %s", page_url)
         return page_url
@@ -276,8 +287,9 @@ def markdown_to_blocks(markdown: str) -> list[dict]:
     lines = markdown.split("\n")
     blocks: list[dict] = []
     i = 0
+    total = len(lines)
 
-    while i < len(lines):
+    while i < total:
         line = lines[i]
         stripped = line.strip()
 
@@ -297,40 +309,40 @@ def markdown_to_blocks(markdown: str) -> list[dict]:
             lang = stripped[3:].strip()
             code_lines = []
             i += 1
-            while i < len(lines) and not lines[i].strip().startswith("```"):
+            while i < total and not lines[i].strip().startswith("```"):
                 code_lines.append(lines[i])
                 i += 1
-            i += 1  # skip closing ```
+            if i < total:
+                i += 1  # skip closing ```
             code_text = "\n".join(code_lines)
-            # Chunk code blocks
-            for chunk_start in range(0, len(code_text), MAX_BLOCK_TEXT):
-                chunk = code_text[chunk_start : chunk_start + MAX_BLOCK_TEXT]
-                blocks.append({
-                    "type": "code",
-                    "code": {
-                        "rich_text": [{"type": "text", "text": {"content": chunk}}],
-                        "language": lang or "plain text",
-                    },
-                })
+            if code_text:
+                for chunk_start in range(0, len(code_text), MAX_BLOCK_TEXT):
+                    chunk = code_text[chunk_start : chunk_start + MAX_BLOCK_TEXT]
+                    blocks.append({
+                        "type": "code",
+                        "code": {
+                            "rich_text": [{"type": "text", "text": {"content": chunk}}],
+                            "language": lang or "plain text",
+                        },
+                    })
             continue
 
         # Table (markdown pipe table)
-        if stripped.startswith("|") and stripped.endswith("|"):
+        if stripped.startswith("|"):
             table_rows = []
-            while i < len(lines) and lines[i].strip().startswith("|"):
+            while i < total and lines[i].strip().startswith("|"):
                 row_text = lines[i].strip()
+                i += 1  # always advance — prevents infinite loop
                 # Skip separator rows like |---|---|
-                if re.match(r"^\|[\s\-:|]+\|$", row_text):
-                    i += 1
+                if re.match(r"^\|[\s\-:|]+\|?$", row_text):
                     continue
                 cells = [c.strip() for c in row_text.split("|")[1:-1]]
-                table_rows.append(cells)
-                i += 1
+                if cells:
+                    table_rows.append(cells)
             if table_rows:
                 width = max(len(r) for r in table_rows)
                 notion_rows = []
                 for row in table_rows:
-                    # Pad rows to width
                     padded = row + [""] * (width - len(row))
                     notion_cells = [_parse_rich_text(cell) for cell in padded]
                     notion_rows.append({
@@ -374,7 +386,7 @@ def markdown_to_blocks(markdown: str) -> list[dict]:
         # Blockquote
         if stripped.startswith("> "):
             quote_lines = []
-            while i < len(lines) and lines[i].strip().startswith("> "):
+            while i < total and lines[i].strip().startswith("> "):
                 quote_lines.append(lines[i].strip()[2:])
                 i += 1
             blocks.append({
@@ -402,10 +414,9 @@ def markdown_to_blocks(markdown: str) -> list[dict]:
             i += 1
             continue
 
-        # Default: paragraph
-        # Collect contiguous non-empty, non-special lines
+        # Default: paragraph — collect contiguous non-special lines
         para_lines = []
-        while i < len(lines):
+        while i < total:
             l = lines[i].strip()
             if not l or l.startswith("#") or l.startswith("```") or l.startswith("|") or l.startswith("> ") or l.startswith("- ") or l.startswith("* ") or l in ("---", "***", "___") or re.match(r"^\d+\.\s", l):
                 break
@@ -416,5 +427,8 @@ def markdown_to_blocks(markdown: str) -> list[dict]:
                 "type": "paragraph",
                 "paragraph": {"rich_text": _parse_rich_text(" ".join(para_lines))},
             })
+        else:
+            # Safety: if nothing matched and nothing was consumed, skip the line
+            i += 1
 
     return blocks

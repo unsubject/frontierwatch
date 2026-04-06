@@ -128,8 +128,17 @@ class BaseBriefing(ABC):
         logger.info("[%s] Starting briefing for %s", self.slug, date_display)
 
         research = self.gather(date_display)
-        result = self.synthesize(research, date_display)
-        url = self.publish(result)
+        logger.info("[%s] Gather complete — %d research results", self.slug, len(research))
 
+        result = self.synthesize(research, date_display)
+        logger.info(
+            "[%s] Synthesis complete — title=%r, content_len=%d, watchlist_items=%d",
+            self.slug,
+            result.get("title", "?"),
+            len(result.get("content", "")),
+            len(result.get("watchlist_items", [])),
+        )
+
+        url = self.publish(result)
         logger.info("[%s] Published: %s", self.slug, url)
         return url
