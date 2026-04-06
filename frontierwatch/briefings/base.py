@@ -124,9 +124,15 @@ class BaseBriefing(ABC):
         # Upsert watchlist items if DB is configured
         if self.notion_watchlist_db_id and result.get("watchlist_items"):
             for item in result["watchlist_items"]:
-                self.notion.upsert_watchlist_item(
-                    self.notion_watchlist_db_id, item
-                )
+                try:
+                    self.notion.upsert_watchlist_item(
+                        self.notion_watchlist_db_id, item
+                    )
+                except Exception as exc:
+                    logger.error(
+                        "Failed to upsert watchlist item %r: %s",
+                        item.get("name", "?"), exc,
+                    )
 
         return url
 

@@ -99,15 +99,27 @@ class NotionClient:
         """Add or update a watchlist entry. Returns the page ID."""
         existing = self._find_by_title(database_id, title_field, item.get("name", ""))
 
+        # Fetch database schema to only send valid properties
+        valid_props = self._get_db_properties(database_id)
         props = self._watchlist_item_to_properties(item, title_field)
+        # Filter out properties not in the database schema
+        if valid_props:
+            filtered = {k: v for k, v in props.items() if k in valid_props}
+            dropped = set(props.keys()) - set(filtered.keys())
+            if dropped:
+                logger.warning("Dropped unknown properties for watchlist: %s", dropped)
+            props = filtered
 
-        with httpx.Client(timeout=60, headers=self.headers) as client:
+        timeout = httpx.Timeout(connect=15, read=60, write=30, pool=15)
+        with httpx.Client(timeout=timeout, headers=self.headers) as client:
             if existing:
                 page_id = existing
                 resp = client.patch(
                     f"{NOTION_API}/pages/{page_id}",
                     json={"properties": props},
                 )
+                if not resp.is_success:
+                    logger.error("Watchlist update error %d: %s", resp.status_code, resp.text[:500])
                 resp.raise_for_status()
                 logger.info("Updated watchlist item: %s", item.get("name"))
             else:
@@ -116,6 +128,8 @@ class NotionClient:
                     "properties": props,
                 }
                 resp = client.post(f"{NOTION_API}/pages", json=body)
+                if not resp.is_success:
+                    logger.error("Watchlist create error %d: %s", resp.status_code, resp.text[:500])
                 resp.raise_for_status()
                 page_id = resp.json()["id"]
                 logger.info("Created watchlist item: %s", item.get("name"))
@@ -125,6 +139,18 @@ class NotionClient:
     # ------------------------------------------------------------------
     # Internal helpers
     # ------------------------------------------------------------------
+
+    def _get_db_properties(self, database_id: str) -> set[str] | None:
+        """Fetch the set of property names from a Notion database."""
+        try:
+            with httpx.Client(timeout=30, headers=self.headers) as client:
+                resp = client.get(f"{NOTION_API}/databases/{database_id}")
+                resp.raise_for_status()
+                schema = resp.json().get("properties", {})
+                return set(schema.keys())
+        except Exception as exc:
+            logger.warning("Could not fetch DB schema for %s: %s", database_id, exc)
+            return None
 
     def _find_by_title(self, database_id: str, title_field: str, title: str) -> str | None:
         """Search a database for an entry matching *title*. Returns page ID or None."""
