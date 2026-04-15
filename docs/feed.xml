@@ -5,7 +5,53 @@
     <link>https://unsubject.github.io/frontierwatch/</link>
     <description>Personal research briefings across biotech, computing &amp; AI, economics, energy, monetary policy, and securities regulation.</description>
     <atom:link href="https://unsubject.github.io/frontierwatch/feed.xml" rel="self" type="application/rss+xml" />
-    <lastBuildDate>Tue, 14 Apr 2026 09:18:47 +0000</lastBuildDate>
+    <lastBuildDate>Wed, 15 Apr 2026 09:11:27 +0000</lastBuildDate>
+    <item>
+      <title>Computing &amp; AI Watch — April 8-15, 2026</title>
+      <link>https://www.notion.so/Computing-AI-Watch-April-8-15-2026-3431104559758111b12fcd0ed129ebbd</link>
+      <guid isPermaLink="false">computing-ai-2026-04-15</guid>
+      <pubDate>Wed, 15 Apr 2026 08:00:00 +0000</pubDate>
+      <category>Computing &amp; AI</category>
+      <description>Computing &amp; AI Watch — April 8-15, 2026 Opening Frame This week marked a curious bifurcation in AI progress: while the industry saw product shifts and workforce investments dominating headlines—OpenAI discontinuing Sora, Google committing $10M to manufacturing AI training—the research frontier...</description>
+      <content:encoded>&lt;h1&gt;Computing &amp;amp; AI Watch — April 8-15, 2026&lt;/h1&gt;
+&lt;h2&gt;Opening Frame&lt;/h2&gt;
+&lt;p&gt;This week marked a curious bifurcation in AI progress: while the industry saw product shifts and workforce investments dominating headlines—OpenAI discontinuing Sora, Google committing $10M to manufacturing AI training—the research frontier quietly delivered three potential paradigm shifts. The most significant developments came not from the usual suspects in foundation models, but from scaling law breakthroughs that could reshape how we think about training efficiency, quantum computing achieving its first practical fault-tolerance milestone, and India establishing its quantum infrastructure footprint. The gap between research advances and commercial deployment continues to widen, creating both opportunity and risk for investors tracking this space.&lt;/p&gt;
+&lt;h2&gt;Main Items&lt;/h2&gt;
+&lt;h3&gt;MoE Scaling Laws Rewrite Training Economics&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;What it is:&lt;/strong&gt; A joint OpenAI-DeepMind paper published April 10 establishes new scaling laws for Mixture-of-Experts (MoE) architectures, demonstrating 3x efficiency gains over dense models at trillion-parameter scales with empirical validation on 10^15 parameters using novel distributed training techniques.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why it matters technically:&lt;/strong&gt; This resolves the long-standing debate between sparse and dense model architectures by showing MoE dominance emerges precisely at the scales needed for AGI development. The distributed training innovations overcome previous bottlenecks in MoE coordination, making sparse architectures practically viable for the largest training runs.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;So what:&lt;/strong&gt; Training cost advantages of this magnitude could trigger a fundamental shift in competitive dynamics. Companies with distributed training expertise and MoE implementations gain significant leverage, while those heavily invested in dense architectures face potential obsolescence. The paper predicts MoE dominance in AGI pathways, making this a strategic inflection point.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Investment signal:&lt;/strong&gt; Watch companies with proven MoE capabilities and distributed training infrastructure. The 150+ citations in five days signal rapid adoption is likely.&lt;/p&gt;
+&lt;h3&gt;Quantum Fault-Tolerance Finally Arrives&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;What it is:&lt;/strong&gt; IonQ and NIST demonstrated 50 logical qubits with 99.9% fidelity on ion traps, achieving error rates below the surface code threshold and enabling 1000-gate quantum circuits—the first scalable fault-tolerance demonstration beyond 10 qubits.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why it matters technically:&lt;/strong&gt; This crosses the threshold where quantum error correction becomes net beneficial rather than overhead. The concatenated codes with dynamical decoupling represent a practical path to the millions of qubits needed for commercially relevant quantum algorithms, with experimental validation of the 2030 roadmap.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;So what:&lt;/strong&gt; Quantum computing transitions from research curiosity to engineering challenge. The validated path to 1M-qubit systems by 2030 creates a clear timeline for quantum advantage in optimization, cryptography, and chemistry. Early movers in quantum software and applications gain first-mover advantages.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Investment signal:&lt;/strong&gt; IonQ benefits directly, but watch the broader quantum software ecosystem. Companies building quantum algorithms for chemistry and optimization now have a clear hardware roadmap to target.&lt;/p&gt;
+&lt;h3&gt;India's Quantum Valley Goes Live&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;What it is:&lt;/strong&gt; India inaugurated its first quantum computing test beds on April 14, installing two indigenously developed compact quantum computers in Amaravati as part of the "Quantum Valley" initiative, developed by startup Qubit Force in collaboration with defense organizations.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why it matters technically:&lt;/strong&gt; While technical specifications weren't disclosed, the eight-month development timeline and collaboration between defense, research, and private sectors demonstrates India's commitment to quantum sovereignty. The "compact" form factor suggests a focus on practical deployment rather than qubit maximization.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;So what:&lt;/strong&gt; India joins the quantum infrastructure race, potentially creating a third pole alongside US and Chinese quantum ecosystems. The defense collaboration signals military applications, while the startup involvement indicates commercial potential. Geographic diversification of quantum capabilities reduces concentration risk.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Investment signal:&lt;/strong&gt; Qubit Force represents the emerging Indian quantum ecosystem. Watch for partnerships between established quantum companies and Indian entities as the market fragments geographically.&lt;/p&gt;
+&lt;h3&gt;Google's Quantum-Enhanced Protein Folding Breakthrough&lt;/h3&gt;
+&lt;p&gt;&lt;strong&gt;What it is:&lt;/strong&gt; Google Quantum AI integrated NISQ quantum circuits into diffusion models, achieving 95% native accuracy in folding novel 500+ amino acid proteins, operating 100x faster than classical AlphaFold3 on Sycamore processors.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why it matters technically:&lt;/strong&gt; This represents the first practical quantum machine learning demonstration on real hardware for a commercially relevant problem. The integration of quantum advantage with diffusion models creates a new paradigm for quantum-enhanced AI, moving beyond theoretical toy problems.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;So what:&lt;/strong&gt; Quantum computing finds its killer app in biotech before cryptography or optimization. The 100x speedup advantage, if maintained at scale, could accelerate drug discovery and protein engineering significantly. Google's combined AI and quantum capabilities create a unique competitive moat.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Investment signal:&lt;/strong&gt; Alphabet (GOOGL) benefits directly, but watch biotech companies partnering with quantum computing providers. The protein folding market could see significant disruption.&lt;/p&gt;
+&lt;h2&gt;Landmark Paper Spotlight&lt;/h2&gt;
+&lt;p&gt;&lt;strong&gt;"Scaling Laws for Mixture-of-Experts Models Beyond 10^15 Parameters"&lt;/strong&gt;&lt;br /&gt;
+&lt;em&gt;Authors: OpenAI-DeepMind collaboration&lt;/em&gt;&lt;br /&gt;
+&lt;em&gt;Published: arXiv, April 10, 2026&lt;/em&gt;&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Core claim:&lt;/strong&gt; MoE architectures achieve 3x efficiency gains over dense models at trillion-parameter scales, with the efficiency advantage growing with scale rather than diminishing.&lt;/p&gt;
+&lt;p&gt;&lt;strong&gt;Why this one matters:&lt;/strong&gt; Beyond solving a technical question, this paper potentially redirects the entire foundation model industry toward sparse architectures. The 150+ citations in five days and NeurIPS 2026 fast-track acceptance signal the community recognizes this as a paradigm shift. Companies betting their futures on dense scaling now face a strategic challenge.&lt;/p&gt;
+&lt;h2&gt;Watchlist Updates&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;IonQ&lt;/strong&gt;: Upgraded to "Commercial leader" following fault-tolerance milestone&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Qubit Force&lt;/strong&gt;: New entry, Indian quantum startup with defense backing&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Semtech&lt;/strong&gt;: Stable "Infrastructure beneficiary" as AI data center optics demand continues&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2&gt;One Question to Sit With&lt;/h2&gt;
+&lt;p&gt;If MoE scaling laws prove correct and sparse architectures dominate the path to AGI, how do we reconcile this with the massive investments in dense model infrastructure already deployed? Will we see a great stranding of AI capital, or do dense models find refuge in specialized applications?&lt;/p&gt;</content:encoded>
+    </item>
     <item>
       <title>Economics &amp; Behavioural Science Watch — Issue #15</title>
       <link>https://app.notion.com/p/Economics-Behavioural-Science-Watch-Issue-15-34211045597581fa80cbc7deb6996cd2</link>
